@@ -29,8 +29,12 @@ func run() {
    cmd.Stdout = os.Stdout
 
    cmd.SysProcAttr = &syscall.SysProcAttr {
-     Cloneflags:  syscall.CLONE_NEWUTS |  syscall.CLONE_NEWPID,
+     Cloneflags:  syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
    }
+
+   /* must(syscall.Chroot("/home/rootfs"))
+   must(os.Chdir("/")) */
+
    must(cmd.Run())
 }
 
@@ -46,6 +50,9 @@ func child() {
      Cloneflags:  syscall.CLONE_NEWUTS |  syscall.CLONE_NEWPID,
    } */
 
+   must(syscall.Chroot("/home/rootfs"))
+   must(os.Chdir("/"))
+   must(syscall.Mount("proc", "proc", "proc", 0, ""))
    must(cmd.Run())
 }
 
