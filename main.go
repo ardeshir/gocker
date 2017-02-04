@@ -22,7 +22,6 @@ func main() {
 }
 
 func run() {
-   // fmt.Printf("running %v as pid %d\n", os.Args[2:], os.Getpid() )
    cmd := exec.Command("/proc/self/exe", append([]string{"child"}, os.Args[2:]...)...)
    cmd.Stdin = os.Stdin
    cmd.Stderr = os.Stderr
@@ -31,9 +30,6 @@ func run() {
    cmd.SysProcAttr = &syscall.SysProcAttr {
      Cloneflags:  syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
    }
-
-   /* must(syscall.Chroot("/home/rootfs"))
-   must(os.Chdir("/")) */
 
    must(cmd.Run())
 }
@@ -50,9 +46,9 @@ func child() {
      Cloneflags:  syscall.CLONE_NEWUTS |  syscall.CLONE_NEWPID,
    } */
 
-   must(syscall.Chroot("/home/rootfs"))
-   must(os.Chdir("/"))
-   must(syscall.Mount("proc", "proc", "proc", 0, ""))
+   // must(syscall.Chroot("/home/rootfs"))
+   // must(os.Chdir("/"))
+   // must(syscall.Mount("proc", "proc", "proc", 0, ""))
    must(cmd.Run())
 }
 
